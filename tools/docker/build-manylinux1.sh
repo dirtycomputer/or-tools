@@ -61,7 +61,8 @@ function export_manylinux_wheel {
     make clean_python
     make python
     #make test_python
-    make pypi_archive
+    make package_python
+    #make test_package_python
     # Build and repair wheels
     cd temp_python*/ortools/dist
     auditwheel repair --plat manylinux2010_x86_64 ./*.whl -w "$export_root"
