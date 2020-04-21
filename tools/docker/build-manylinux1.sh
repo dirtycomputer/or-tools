@@ -65,8 +65,14 @@ function export_manylinux_wheel {
     #make test_package_python
     # Build and repair wheels
     cd temp_python*/ortools/dist
-    auditwheel repair --plat manylinux2010_x86_64 ./*.whl -w "$export_root"
-}
+    for FILE in *.whl; do
+      # if no files found do nothing
+      [[ -e "$FILE" ]] || continue
+      cp "$FILE" "${export_root}/${FILE%.whl}"_unfixed.whl
+      auditwheel show "$FILE"
+      auditwheel repair --plat manylinux2010_x86_64 "$FILE" -w "$export_root"
+    done
+    }
 
 function test_installed {
     # Run all the specified test scripts using the current environment.
