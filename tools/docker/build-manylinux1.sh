@@ -70,7 +70,8 @@ function export_manylinux_wheel {
       [[ -e "$FILE" ]] || continue
       cp "$FILE" "${export_root}/${FILE%.whl}"_unfixed.whl
       auditwheel show "$FILE"
-      auditwheel repair --plat manylinux2010_x86_64 "$FILE" -w "$export_root"
+      /opt/_internal/cpython-3.7.7/bin/python -m auditwheel -v repair --plat manylinux2010_x86_64 "$FILE" -w "$export_root"
+      #auditwheel -v repair --plat manylinux2010_x86_64 "$FILE" -w "$export_root"
     done
     }
 
@@ -143,6 +144,9 @@ TESTS=(
 # Force the use of wheel 0.31.1 since 0.32 is broken
 # cf pypa/auditwheel#102
 #/opt/_internal/cpython-3.6.6/bin/python -m pip install wheel==0.31.1
+
+# Downgrade auditwheel
+/opt/_internal/cpython-3.7.7/bin/pip install auditwheel==2.0.0
 
 mkdir -p "${BUILD_ROOT}"
 mkdir -p "${EXPORT_ROOT}"
